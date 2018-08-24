@@ -1,0 +1,16 @@
+App\Entity\Master:
+    master_1:
+        firstname: 'Chris'
+        lastname: 'Tof'
+        email: 'christ@tof.com'
+        apiKey: 'fixtureApiKey'
+        roles: ["ROLE_USER","ROLE_ADMIN"]
+    master_2:
+        firstname: 'dono'
+        lastname: 'van'
+        email: 'dono@van.com'
+        apiKey: 'apiKey2'
+    master_{3..10}:
+        firstname: <firstName()>
+        lastname: <lastName()>
+        email: <email()>

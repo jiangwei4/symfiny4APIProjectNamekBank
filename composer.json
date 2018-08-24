@@ -29,6 +29,8 @@
         "symfony/yaml": "*"
     },
     "require-dev": {
+        "doctrine/data-fixtures": "^1.3",
+        "hautelook/alice-bundle": "^2.0",
         "symfony/debug-pack": "*",
         "symfony/dotenv": "*",
         "symfony/test-pack": "*",
