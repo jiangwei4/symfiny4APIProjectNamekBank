@@ -1,3 +1,22 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+masters:
+    type: rest
+    resource: App\Controller\MasterController
+    prefix : /api
+
+creditcards:
+    type: rest
+    resource: App\Controller\CreditcardController
+    prefix : /api
+
+companys:
+    type: rest
+    resource: App\Controller\CompanyController
+    prefix : /api
+
+app.swagger_ui:
+    path: /api/doc
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }

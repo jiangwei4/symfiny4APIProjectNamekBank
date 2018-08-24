@@ -25,12 +25,14 @@ class Master implements UserInterface
     private $id;
 
     /**
+     * @Groups("master")
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $firstname;
 
     /**
+     * @Groups("master")
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
@@ -133,12 +135,12 @@ class Master implements UserInterface
         return $this;
     }
 
-    public function getRoles(): ?string
+    public function getRoles(): array
     {
         return $this->roles;
     }
 
-    public function setRoles(?string $roles): self
+    public function setRoles(?array $roles): self
     {
         $this->roles = $roles;
 

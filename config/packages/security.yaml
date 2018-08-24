@@ -4,7 +4,7 @@ security:
         #in_memory: { memory: ~ }
         your_db_provider:
             entity:
-                class: App\Entity\User
+                class: App\Entity\Master
                 property: apiKey
     firewalls:
         dev:
