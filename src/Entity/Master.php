@@ -53,8 +53,8 @@ class Master implements UserInterface
     private $apiKey;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Company", mappedBy="master", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
+     *@Groups("master")
+     * @ORM\OneToOne(targetEntity="App\Entity\Company", inversedBy="master")
      */
     private $company;
 
@@ -67,7 +67,6 @@ class Master implements UserInterface
     {
         $this->roles = array('ROLE_USER');
         $this->apiKey = uniqid('', true);
-        $this->company = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,12 +122,12 @@ class Master implements UserInterface
         return $this;
     }
 
-    public function getCompany(): ?string
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompany(?string $company): self
+    public function setCompany(?Company $company): self
     {
         $this->company = $company;
 

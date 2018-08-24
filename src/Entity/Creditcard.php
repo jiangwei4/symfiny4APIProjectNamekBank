@@ -32,7 +32,7 @@ class Creditcard
     private $creditcardNumber;
 
     /**
-     * @@ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="creditcard")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="creditcard")
      */
     private $company;
 

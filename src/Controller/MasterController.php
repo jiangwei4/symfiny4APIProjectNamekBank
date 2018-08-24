@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Controller;
-
 use App\Entity\Master;
 use App\Repository\MasterRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +11,6 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
 class MasterController extends FOSRestController
 {
     private $em;
@@ -22,9 +19,7 @@ class MasterController extends FOSRestController
     {
         $this->masterRepository = $masterRepository;
         $this->em = $em;
-
     }
-
     private function MasterDroitMaster(Master $master)
     {
         if ($this->getUser() === $master || in_array("ROLE_ADMIN",$this->getUser()->getRoles()) ) {
@@ -43,7 +38,6 @@ class MasterController extends FOSRestController
         }
         return $return;
     }
-
     private function PostError($validationErrors){
         $error = array("error :");
         /** @var ConstraintViolationListInterface $validationErrors */
@@ -55,7 +49,6 @@ class MasterController extends FOSRestController
         }
         return $error;
     }
-
     /**
      * @SWG\Parameter(
      *     name="AUTH-TOKEN",
@@ -69,7 +62,6 @@ class MasterController extends FOSRestController
      */
     public function getMastersAction()
     {
-
         if($this->getUser() !== null )
         {
             if ($this->MasterDroit()) {
@@ -80,7 +72,6 @@ class MasterController extends FOSRestController
             return $this->view('Not Logged', 401);
         }
     }
-
     /**
      * @SWG\Parameter(
      *     name="AUTH-TOKEN",
@@ -93,11 +84,10 @@ class MasterController extends FOSRestController
      * @Rest\View(serializerGroups={"master"})
      *
      */
-    public function getUserAction(Master $master)
+    public function getMasterAction(Master $master)
     {
         if($this->getUser() !== null ) {
             if ($this->MasterDroitMaster($master)) {
-
                 return $this->view($master);
             }
             return $this->view('Not Logged for this user or not an Admin', 403);
@@ -105,18 +95,6 @@ class MasterController extends FOSRestController
             return $this->view('Not Logged', 401);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * @SWG\Response(response=200, description="")
      * @SWG\Tag(name="master")
@@ -124,7 +102,7 @@ class MasterController extends FOSRestController
      * @Rest\Post("/masters")
      * @ParamConverter("user", converter="fos_rest.request_body")
      */
-    public function postUsersAction(Master $master, EntityManagerInterface $em, ValidatorInterface $validator)
+    public function postMastersAction(Master $master, EntityManagerInterface $em, ValidatorInterface $validator)
     {
         $validationErrors = $validator->validate($master);
         if(!($validationErrors->count() > 0) ){
@@ -135,7 +113,6 @@ class MasterController extends FOSRestController
             return $this->view($this->PostError($validationErrors),400);
         }
     }
-
     /**
      *  @SWG\Parameter(
      *     name="AUTH-TOKEN",
@@ -147,7 +124,7 @@ class MasterController extends FOSRestController
      * @SWG\Tag(name="master")
      * @Rest\View(serializerGroups={"master"})
      */
-    public function putUserAction(Request $request, $id, ValidatorInterface $validator)
+    public function putMasterAction(Request $request, $id, ValidatorInterface $validator)
     {
         $users = $this->masterRepository->find($id);
         if($users === null){
@@ -155,15 +132,12 @@ class MasterController extends FOSRestController
         }
         // dump($this->getUser());die;
         if ($id == $this->getUser()->getId() || $this->MasterDroit()) {
-
             /** @var Master $us */
             $us = $this->masterRepository->find($id);
-
             $firstname = $request->get('firstname');
             $lastname = $request->get('lastname');
             $email = $request->get('email');
             $company = $request->get('birthday');
-
             if (isset($firstname)) {
                 $us->setFirstname($firstname);
             }
@@ -187,9 +161,7 @@ class MasterController extends FOSRestController
         } else {
             return $this->view('Not the same user or tu n as pas les droits',401);
         }
-
     }
-
     /**
      * @SWG\Parameter(
      *     name="AUTH-TOKEN",
@@ -201,7 +173,7 @@ class MasterController extends FOSRestController
      * @SWG\Tag(name="master")
      * @Rest\View(serializerGroups={"master"})
      */
-    public function deleteUserAction($id)
+    public function deleteMasterAction($id)
     {
         /** @var Master $us */
         $users = $this->masterRepository->findBy(["id"=>$id]);
@@ -220,6 +192,4 @@ class MasterController extends FOSRestController
             return $this->view('Not Logged', 401);
         }
     }
-
-
 }
