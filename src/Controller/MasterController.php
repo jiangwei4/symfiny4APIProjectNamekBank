@@ -73,12 +73,7 @@ class MasterController extends FOSRestController
         }
     }
     /**
-     * @SWG\Parameter(
-     *     name="AUTH-TOKEN",
-     *     in="header",
-     *     type="string",
-     *     description="Api Token"
-     * )
+
      * @SWG\Response(response=200, description="")
      * @SWG\Tag(name="master")
      * @Rest\View(serializerGroups={"master"})
@@ -86,21 +81,21 @@ class MasterController extends FOSRestController
      */
     public function getMasterAction(Master $master)
     {
-        if($this->getUser() !== null ) {
-            if ($this->MasterDroitMaster($master)) {
+      //  if($this->getUser() !== null ) {
+            //if ($this->MasterDroitMaster($master)) {
                 return $this->view($master);
-            }
-            return $this->view('Not Logged for this user or not an Admin', 403);
-        } else {
+          //  }
+         //   return $this->view('Not Logged for this user or not an Admin', 403);
+      /*  } else {
             return $this->view('Not Logged', 401);
-        }
+        }*/
     }
     /**
      * @SWG\Response(response=200, description="")
      * @SWG\Tag(name="master")
      * @Rest\View(serializerGroups={"master"})
      * @Rest\Post("/masters")
-     * @ParamConverter("user", converter="fos_rest.request_body")
+     * @ParamConverter("master", converter="fos_rest.request_body")
      */
     public function postMastersAction(Master $master, EntityManagerInterface $em, ValidatorInterface $validator)
     {

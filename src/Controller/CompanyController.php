@@ -85,12 +85,6 @@ class CompanyController extends FOSRestController
         }
     }
     /**
-     * @SWG\Parameter(
-     *     name="AUTH-TOKEN",
-     *     in="header",
-     *     type="string",
-     *     description="Api Token"
-     * )
      * @SWG\Response(response=200, description="")
      * @SWG\Tag(name="Company")
      * @Rest\View(serializerGroups={"Company"})
@@ -98,14 +92,14 @@ class CompanyController extends FOSRestController
      */
     public function getCompanyAction(Company $company)
     {
-        if($this->getUser() !== null ) {
-            if ($this->MasterDroitMaster($company->getMaster())) {
+       /* if($this->getUser() !== null ) {
+            if ($this->MasterDroitMaster($company->getMaster())) {*/
                 return $this->view($company);
-            }
+           /* }
             return $this->view('Not Logged for this user or not an Admin', 403);
         } else {
             return $this->view('Not Logged', 401);
-        }
+        }*/
     }
 
 
@@ -118,7 +112,7 @@ class CompanyController extends FOSRestController
      * @SWG\Tag(name="Company")
      * @Rest\View(serializerGroups={"Company"})
      * @Rest\Post("/Company")
-     * @ParamConverter("user", converter="fos_rest.request_body")
+     * @ParamConverter("company", converter="fos_rest.request_body")
      */
     public function postCompanysAction(Company $company, EntityManagerInterface $em, ValidatorInterface $validator)
     {

@@ -44,6 +44,7 @@ class Master implements UserInterface
      *     message = "The email '{{ value }}' is not a valid email.",
      *     checkMX = true
      * )
+     * @Assert\NotBlank()
      */
     private $email;
 

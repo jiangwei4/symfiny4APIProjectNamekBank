@@ -86,12 +86,6 @@ class CreditcardController extends FOSRestController
         }
     }
     /**
-     * @SWG\Parameter(
-     *     name="AUTH-TOKEN",
-     *     in="header",
-     *     type="string",
-     *     description="Api Token"
-     * )
      * @SWG\Response(response=200, description="")
      * @SWG\Tag(name="Creditcard")
      * @Rest\View(serializerGroups={"Creditcard"})
@@ -99,14 +93,14 @@ class CreditcardController extends FOSRestController
      */
     public function getCreditcardAction(Creditcard $creditcard)
     {
-        if($this->getUser() !== null ) {
-            if ($this->MasterDroitMaster($creditcard->getCompany())) {
+      /*  if($this->getUser() !== null ) {
+            if ($this->MasterDroitMaster($creditcard->getCompany())) {*/
                 return $this->view($creditcard);
-            }
+        /*    }
             return $this->view('Not Logged for this user or not an Admin', 403);
         } else {
             return $this->view('Not Logged', 401);
-        }
+        }*/
     }
 
 
@@ -119,10 +113,12 @@ class CreditcardController extends FOSRestController
      * @SWG\Tag(name="Creditcard")
      * @Rest\View(serializerGroups={"Creditcard"})
      * @Rest\Post("/Creditcard")
-     * @ParamConverter("user", converter="fos_rest.request_body")
+     * @ParamConverter("creditcard", converter="fos_rest.request_body")
      */
     public function postCreditcardsAction(Creditcard $creditcard, EntityManagerInterface $em, ValidatorInterface $validator)
     {
+
+        ///empecher anonymous de créer une carte
         $validationErrors = $validator->validate($creditcard);
         if(!($validationErrors->count() > 0) ){
             $this->em->persist($creditcard);
