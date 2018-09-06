@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Company;
-use App\Entity\Master;
 use App\Repository\CompanyRepository;
+use App\Repository\CreditcardRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -20,22 +20,14 @@ class CompanyController extends FOSRestController
 {
     private $companyRepository;
     private $em;
-    public function __construct(CompanyRepository $companyRepository, EntityManagerInterface $em)
+    public function __construct(CompanyRepository $companyRepository,CreditcardRepository $creditcardRepository, EntityManagerInterface $em)
     {
         $this->companyRepository = $companyRepository;
+        $this->creditcardRepository = $creditcardRepository;
         $this->em = $em;
     }
 
-    private function MasterDroitMaster(Master $master)
-    {
-        if ($this->getUser() === $master || in_array("ROLE_ADMIN",$this->getUser()->getRoles()) ) {
-            $return = true;
-        } else {
-            $return = false;
-        }
-        return $return;
-    }
-    private function MasterDroit()
+    private function MasterAdminDroit()
     {
         if (in_array("ROLE_ADMIN",$this->getUser()->getRoles()) ) {
             $return = true;
@@ -44,6 +36,7 @@ class CompanyController extends FOSRestController
         }
         return $return;
     }
+
 
     private function PostError($validationErrors){
         $error = array("error :");
@@ -56,9 +49,6 @@ class CompanyController extends FOSRestController
         }
         return $error;
     }
-
-
-
 
 
     /**
@@ -76,7 +66,7 @@ class CompanyController extends FOSRestController
     {
         if($this->getUser() !== null )
         {
-            if ($this->MasterDroit()) {
+            if ($this->MasterAdminDroit()) {
                 return $this->view($this->companyRepository->findAll());
             }
             return $this->view('Not Logged for this user or not an Admin', 403);
@@ -92,19 +82,8 @@ class CompanyController extends FOSRestController
      */
     public function getCompanyAction(Company $company)
     {
-       /* if($this->getUser() !== null ) {
-            if ($this->MasterDroitMaster($company->getMaster())) {*/
-                return $this->view($company);
-           /* }
-            return $this->view('Not Logged for this user or not an Admin', 403);
-        } else {
-            return $this->view('Not Logged', 401);
-        }*/
+      return $this->view($company);
     }
-
-
-
-
 
 
     /**
@@ -139,30 +118,37 @@ class CompanyController extends FOSRestController
      */
     public function putCompanyAction(Request $request, $id, ValidatorInterface $validator)
     {
-        $users = $this->companyRepository->find($id);
-        if($users === null){
-            return $this->view('User does note existe', 404);
+        $company = $this->companyRepository->find($id);
+        if($company === null){
+            return $this->view('Compagny does note existe', 404);
         }
-        // dump($this->getUser());die;
-        if ($id == $this->getUser()->getId() || $this->MasterDroit()) {
-            /** @var Master $us */
+        if ($this->getUser() == $company->getMaster() || $this->MasterAdminDroit()) {
+            /** @var Company $us */
             $us = $this->companyRepository->find($id);
-           /* $firstname = $request->get('firstname');
-            $lastname = $request->get('lastname');
-            $email = $request->get('email');
-            $company = $request->get('birthday');
-            if (isset($firstname)) {
-                $us->setFirstname($firstname);
+            $name = $request->get('name');
+            $slogan = $request->get('slogan');
+            $adress = $request->get('adress');
+            $websiteUrl = $request->get('websiteUrl');
+           $pictureUrl = $request->get('pictureUrl');
+           $phoneNumber = $request->get('phoneNumber');
+            if (isset($name)) {
+                $us->setName($name);
             }
-            if (isset($lastname)) {
-                $us->setLastname($lastname);
+            if (isset($slogan)) {
+                $us->setSlogan($slogan);
             }
-            if (isset($email)) {
-                $us->setEmail($email);
+            if (isset($adress)) {
+                $us->setAdress($adress);
             }
-            if (isset($company)) {
-                $us->setCompany($company);
-            }*/
+            if (isset($websiteUrl)) {
+                $us->setWebsiteUrl($websiteUrl);
+            }
+            if (isset($pictureUrl)) {
+                $us->setPictureUrl($pictureUrl);
+            }
+            if (isset($phoneNumber)) {
+                $us->setPhoneNumber($phoneNumber);
+            }
             $this->em->persist($us);
             $validationErrors = $validator->validate($us);
             if(!($validationErrors->count() > 0) ) {
@@ -188,14 +174,14 @@ class CompanyController extends FOSRestController
      */
     public function deleteCompanyAction($id)
     {
-        /** @var Master $us */
-        $users = $this->companyRepository->findBy(["id"=>$id]);
-        if($users === []){
-            return $this->view('User does note existe', 404);
+        /** @var Company $us */
+        $company = $this->companyRepository->findBy(["id"=>$id]);
+        if($company === []){
+            return $this->view('company does note existe', 404);
         }
         if($this->getUser() !== null ) {
             $us = $this->companyRepository->find($id);
-            if ($us === $this->getUser() || $this->MasterDroit()) {
+            if ($us->getMaster() === $this->getUser() || $this->MasterAdminDroit()) {
                 $this->em->remove($us);
                 $this->em->flush();
             } else {

@@ -2,14 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
 use App\Entity\Creditcard;
 use App\Entity\Master;
 use App\Repository\CreditcardRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -27,7 +26,7 @@ class CreditcardController extends FOSRestController
         $this->em = $em;
     }
 
-    private function MasterDroitMaster(Master $master)
+    private function MasterAdminDroitMaster(Master $master)
     {
         if ($this->getUser() === $master || in_array("ROLE_ADMIN",$this->getUser()->getRoles()) ) {
             $return = true;
@@ -36,7 +35,7 @@ class CreditcardController extends FOSRestController
         }
         return $return;
     }
-    private function MasterDroit()
+    private function MasterAdminDroit()
     {
         if (in_array("ROLE_ADMIN",$this->getUser()->getRoles()) ) {
             $return = true;
@@ -59,6 +58,29 @@ class CreditcardController extends FOSRestController
     }
 
 
+    /**
+     * @SWG\Parameter(
+     *     name="AUTH-TOKEN",
+     *     in="header",
+     *     type="string",
+     *     description="Api Token"
+     * )
+     * @SWG\Response(response=200, description="")
+     * @SWG\Tag(name="Creditcard")
+     * @Rest\View(serializerGroups={"Creditcard"})
+     */
+    public function getCreditcardsAction(Company $company)
+    {
+        if($this->getUser() !== null )
+        {
+            if ($this->MasterAdminDroit() || $this->getUser() == $company->getMaster()) {
+                return $this->view($this->creditcardRepository->findBy(["company"=>$company]));
+            }
+            return $this->view('Not Logged for this user or not an Admin', 403);
+        } else {
+            return $this->view('Not Logged', 401);
+        }
+    }
 
 
 
@@ -73,11 +95,11 @@ class CreditcardController extends FOSRestController
      * @SWG\Tag(name="Creditcard")
      * @Rest\View(serializerGroups={"Creditcard"})
      */
-    public function getCreditcardsAction()
+    public function getCreditcardsofallcompanyAction()
     {
         if($this->getUser() !== null )
         {
-            if ($this->MasterDroit()) {
+            if ($this->MasterAdminDroit()) {
                 return $this->view($this->creditcardRepository->findAll());
             }
             return $this->view('Not Logged for this user or not an Admin', 403);
@@ -85,7 +107,15 @@ class CreditcardController extends FOSRestController
             return $this->view('Not Logged', 401);
         }
     }
+
+
     /**
+     *  @SWG\Parameter(
+     *     name="AUTH-TOKEN",
+     *     in="header",
+     *     type="string",
+     *     description="Api Token"
+     * )
      * @SWG\Response(response=200, description="")
      * @SWG\Tag(name="Creditcard")
      * @Rest\View(serializerGroups={"Creditcard"})
@@ -93,39 +123,37 @@ class CreditcardController extends FOSRestController
      */
     public function getCreditcardAction(Creditcard $creditcard)
     {
-      /*  if($this->getUser() !== null ) {
-            if ($this->MasterDroitMaster($creditcard->getCompany())) {*/
-                return $this->view($creditcard);
-        /*    }
-            return $this->view('Not Logged for this user or not an Admin', 403);
-        } else {
-            return $this->view('Not Logged', 401);
-        }*/
+        return $this->view($creditcard);
     }
 
 
 
-
-
-
     /**
+     * @SWG\Parameter(
+     *     name="AUTH-TOKEN",
+     *     in="header",
+     *     type="string",
+     *     description="Api Token"
+     * )
      * @SWG\Response(response=200, description="")
      * @SWG\Tag(name="Creditcard")
      * @Rest\View(serializerGroups={"Creditcard"})
      * @Rest\Post("/Creditcard")
      * @ParamConverter("creditcard", converter="fos_rest.request_body")
      */
-    public function postCreditcardsAction(Creditcard $creditcard, EntityManagerInterface $em, ValidatorInterface $validator)
+    public function postCreditcardsAction(Creditcard $creditcard, ValidatorInterface $validator)
     {
-
-        ///empecher anonymous de créer une carte
-        $validationErrors = $validator->validate($creditcard);
-        if(!($validationErrors->count() > 0) ){
-            $this->em->persist($creditcard);
-            $this->em->flush();
-            return $this->view($creditcard,200);
+        if($this->getUser() == $creditcard->getCompany()->getMaster() || $this->MasterAdminDroit()) {
+            $validationErrors = $validator->validate($creditcard);
+            if (!($validationErrors->count() > 0)) {
+                $this->em->persist($creditcard);
+                $this->em->flush();
+                return $this->view($creditcard, 200);
+            } else {
+                return $this->view($this->PostError($validationErrors), 400);
+            }
         } else {
-            return $this->view($this->PostError($validationErrors),400);
+            return $this->view('Not the same user or tu n as pas les droits',401);
         }
     }
 
@@ -142,30 +170,25 @@ class CreditcardController extends FOSRestController
      */
     public function putCreditcardAction(Request $request, $id, ValidatorInterface $validator)
     {
-        $users = $this->creditcardRepository->find($id);
-        if($users === null){
-            return $this->view('User does note existe', 404);
+        $creditcard = $this->creditcardRepository->find($id);
+        if($creditcard === null){
+            return $this->view('creditcard does note existe', 404);
         }
-        // dump($this->getUser());die;
-        if ($id == $this->getUser()->getId() || $this->MasterDroit()) {
-            /** @var Master $us */
+        if ($creditcard->getCompany()->getMaster() == $this->getUser() || $this->MasterAdminDroit()) {
+            /** @var Creditcard $us */
             $us = $this->creditcardRepository->find($id);
-            /* $firstname = $request->get('firstname');
-             $lastname = $request->get('lastname');
-             $email = $request->get('email');
-             $company = $request->get('birthday');
-             if (isset($firstname)) {
-                 $us->setFirstname($firstname);
+             $name = $request->get('$name');
+             $creditcardType = $request->get('$creditcardType');
+             $creditcardNumber = $request->get('$creditcardNumber');
+             if (isset($name)) {
+                 $us->setName($name);
              }
-             if (isset($lastname)) {
-                 $us->setLastname($lastname);
+             if (isset($creditcardType)) {
+                 $us->setCreditcardType($creditcardType);
              }
-             if (isset($email)) {
-                 $us->setEmail($email);
+             if (isset($creditcardNumber)) {
+                 $us->setCreditcardNumber($creditcardNumber);
              }
-             if (isset($company)) {
-                 $us->setCompany($company);
-             }*/
             $this->em->persist($us);
             $validationErrors = $validator->validate($us);
             if(!($validationErrors->count() > 0) ) {
@@ -191,14 +214,16 @@ class CreditcardController extends FOSRestController
      */
     public function deleteCreditcardAction($id)
     {
-        /** @var Master $us */
-        $users = $this->creditcardRepository->findBy(["id"=>$id]);
-        if($users === []){
-            return $this->view('User does note existe', 404);
+
+        /** @var Creditcard $creditcard */
+        $creditcard = $this->creditcardRepository->findBy(["id"=>$id]);
+        if($creditcard === []){
+            return $this->view('creditcard does note existe', 404);
         }
         if($this->getUser() !== null ) {
             $us = $this->creditcardRepository->find($id);
-            if ($us === $this->getUser() || $this->MasterDroit()) {
+
+            if ($creditcard->getCompany()->getMaster() === $this->getUser() || $this->MasterAdminDroit()) {
                 $this->em->remove($us);
                 $this->em->flush();
             } else {

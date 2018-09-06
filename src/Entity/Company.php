@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Faker\Test\Provider\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -91,7 +90,7 @@ class Company
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): ?string
     {
         $this->name = $name;
 
@@ -103,7 +102,7 @@ class Company
         return $this->slogan;
     }
 
-    public function setSlogan(string $slogan): self
+    public function setSlogan(string $slogan): ?string
     {
         $this->slogan = $slogan;
 
@@ -115,7 +114,7 @@ class Company
         return $this->adress;
     }
 
-    public function setAdress(string $adress): self
+    public function setAdress(string $adress): ?string
     {
         $this->adress = $adress;
 
@@ -127,7 +126,7 @@ class Company
         return $this->websiteUrl;
     }
 
-    public function setWebsiteUrl(?string $websiteUrl): self
+    public function setWebsiteUrl(?string $websiteUrl): ?string
     {
         $this->websiteUrl = $websiteUrl;
 
@@ -139,7 +138,7 @@ class Company
         return $this->pictureUrl;
     }
 
-    public function setPictureUrl(?string $pictureUrl): self
+    public function setPictureUrl(?string $pictureUrl): ?string
     {
         $this->pictureUrl = $pictureUrl;
 

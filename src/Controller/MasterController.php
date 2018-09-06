@@ -20,16 +20,8 @@ class MasterController extends FOSRestController
         $this->masterRepository = $masterRepository;
         $this->em = $em;
     }
-    private function MasterDroitMaster(Master $master)
-    {
-        if ($this->getUser() === $master || in_array("ROLE_ADMIN",$this->getUser()->getRoles()) ) {
-            $return = true;
-        } else {
-            $return = false;
-        }
-        return $return;
-    }
-    private function MasterDroit()
+
+    private function MasterAdminDroit()
     {
         if (in_array("ROLE_ADMIN",$this->getUser()->getRoles()) ) {
             $return = true;
@@ -38,6 +30,8 @@ class MasterController extends FOSRestController
         }
         return $return;
     }
+
+
     private function PostError($validationErrors){
         $error = array("error :");
         /** @var ConstraintViolationListInterface $validationErrors */
@@ -64,7 +58,7 @@ class MasterController extends FOSRestController
     {
         if($this->getUser() !== null )
         {
-            if ($this->MasterDroit()) {
+            if ($this->MasterAdminDroit()) {
                 return $this->view($this->masterRepository->findAll());
             }
             return $this->view('Not Logged for this user or not an Admin', 403);
@@ -81,14 +75,7 @@ class MasterController extends FOSRestController
      */
     public function getMasterAction(Master $master)
     {
-      //  if($this->getUser() !== null ) {
-            //if ($this->MasterDroitMaster($master)) {
-                return $this->view($master);
-          //  }
-         //   return $this->view('Not Logged for this user or not an Admin', 403);
-      /*  } else {
-            return $this->view('Not Logged', 401);
-        }*/
+        return $this->view($master);
     }
     /**
      * @SWG\Response(response=200, description="")
@@ -125,10 +112,8 @@ class MasterController extends FOSRestController
         if($users === null){
             return $this->view('User does note existe', 404);
         }
-        // dump($this->getUser());die;
-        if ($id == $this->getUser()->getId() || $this->MasterDroit()) {
+        if ( $this->MasterAdminDroit() || $users == $this->getUser()) {
             /** @var Master $us */
-            $us = $this->masterRepository->find($id);
             $firstname = $request->get('firstname');
             $lastname = $request->get('lastname');
             $email = $request->get('email');
@@ -177,7 +162,7 @@ class MasterController extends FOSRestController
         }
         if($this->getUser() !== null ) {
             $us = $this->masterRepository->find($id);
-            if ($us === $this->getUser() || $this->MasterDroit()) {
+            if ($us === $this->getUser() || $this->MasterAdminDroit()) {
                 $this->em->remove($us);
                 $this->em->flush();
             } else {

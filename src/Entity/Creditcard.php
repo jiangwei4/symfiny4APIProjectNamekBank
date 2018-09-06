@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CreditcardRepository")
@@ -18,24 +19,28 @@ class Creditcard
     private $id;
 
     /**
+     *  @Groups("Creditcard")
      * @ORM\Column(type="string", length=255)
-     * Assert\NotBlank()
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
+     * @Groups("Creditcard")
      * @ORM\Column(type="string", length=255)
-     * Assert\NotBlank()
+     * @Assert\NotBlank()
      */
     private $creditcardType;
 
     /**
+     * @Groups("Creditcard")
      * @ORM\Column(type="string", length=255)
-     * Assert\NotBlank()
+     * @Assert\NotBlank()
      */
     private $creditcardNumber;
 
     /**
+     * @Groups("Creditcard")
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="creditcard")
      */
     private $company;
@@ -50,7 +55,7 @@ class Creditcard
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): ?string
     {
         $this->name = $name;
 
@@ -62,7 +67,7 @@ class Creditcard
         return $this->creditcardType;
     }
 
-    public function setCreditcardType(string $creditcardType): self
+    public function setCreditcardType(string $creditcardType): ?string
     {
         $this->creditcardType = $creditcardType;
 
@@ -74,22 +79,28 @@ class Creditcard
         return $this->creditcardNumber;
     }
 
-    public function setCreditcardNumber(string $creditcardNumber): self
+    public function setCreditcardNumber(string $creditcardNumber): ?string
     {
         $this->creditcardNumber = $creditcardNumber;
 
         return $this;
     }
 
-    public function getCompany(): ?string
+    /**
+     * @return mixed
+     */
+    public function getCompany()
     {
         return $this->company;
     }
 
-    public function setCompany(string $company): self
+    /**
+     * @param mixed $company
+     */
+    public function setCompany($company): void
     {
         $this->company = $company;
-
-        return $this;
     }
+
+
 }
