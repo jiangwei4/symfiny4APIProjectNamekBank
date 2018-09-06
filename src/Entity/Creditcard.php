@@ -12,6 +12,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Creditcard
 {
     /**
+     * @Groups("Creditcard")
+     * @Groups("Company")
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -19,6 +21,7 @@ class Creditcard
     private $id;
 
     /**
+     * @Groups("Company")
      *  @Groups("Creditcard")
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()

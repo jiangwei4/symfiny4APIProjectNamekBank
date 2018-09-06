@@ -15,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Master implements UserInterface
 {
     /**
+     * @Groups("master")
+     * @Groups("Company")
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -36,6 +38,8 @@ class Master implements UserInterface
     private $lastname;
 
     /**
+     * @Groups("master")
+     * @Groups("Company")
      * @ORM\Column(type="string", length=255)
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email.",
@@ -46,11 +50,13 @@ class Master implements UserInterface
     private $email;
 
     /**
+     * @Groups("master")
      * @ORM\Column(type="string", length=255)
      */
     private $apiKey;
 
     /**
+     * @Groups("master")
      *@Groups("master")
      * @ORM\OneToOne(targetEntity="App\Entity\Company", inversedBy="master")
      */

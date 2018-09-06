@@ -13,6 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Company
 {
     /**
+     * @Groups("master")
+     * @Groups("Company")
+     * @Groups("Creditcard")
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -20,8 +23,9 @@ class Company
     private $id;
 
     /**
-     * @Groups("Company")
      * @Groups("master")
+     * @Groups("Company")
+     * @Groups("Creditcard")
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
@@ -69,7 +73,6 @@ class Company
 
     /**
      * @Groups("Company")
-     *
      * @ORM\OneToMany(targetEntity="App\Entity\Creditcard", mappedBy="company", cascade={"remove"})
      * @ORM\JoinColumn(nullable=true)
      */
