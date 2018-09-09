@@ -1,17 +1,19 @@
 App\Entity\Master:
     master_1:
-        firstname: 'Chris'
-        lastname: 'Tof'
-        email: 'christ@tof.com'
+        firstname: <firstName()>
+        lastname: <lastName()>
+        email: <email()>
         apiKey: 'keyAdmin'
         roles: ["ROLE_USER","ROLE_ADMIN"]
+        company: '@company_1'
     master_2:
-        firstname: 'dono'
-        lastname: 'van'
-        email: 'dono@van.com'
+        firstname: <firstName()>
+        lastname: <lastName()>
+        email: <email()>
         apiKey: 'keyUser'
+        company: '@company_2'
     master_{3..10}:
         firstname: <firstName()>
         lastname: <lastName()>
         email: <email()>
-
+        company: '@company_<current()>'

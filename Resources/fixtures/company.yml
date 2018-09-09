@@ -1,8 +1,10 @@
 App\Entity\Company:
     company_{1..10}:
-        name: 'Chris'
-        slogan: 'Tof'
-        adress: 'christ@tof.com'
-        phoneNumber: 'keyAdmin'
-        websiteUrl: 'ouioui'
-        pictureUrl: 'Chris'
+        name: <company()>
+        slogan: <catchPhrase()>
+        adress: <address()>
+        phoneNumber: <phoneNumber()>
+        websiteUrl: <url()>
+        pictureUrl: <imageUrl()>
+        master: '@master_<current()>'
+        creditcard: ['@creditcard_<current()>']

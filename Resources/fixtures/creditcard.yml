@@ -1,6 +1,7 @@
 App\Entity\Creditcard:
     creditcard_{1..10}:
-        name: 'Chris'
-        creditcardType: 'Tof'
-        creditcardNumber: 'christ@tof.com'
+        name: <name()>
+        creditcardType: <creditCardType()>
+        creditcardNumber: <creditCardNumber()>
+        company: '@company_<current()>'
 
