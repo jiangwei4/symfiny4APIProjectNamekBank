@@ -174,15 +174,15 @@ class CompanyController extends FOSRestController
      */
     public function deleteCompanyAction($id)
     {
-        /** @var Company $us */
-        $company = $this->companyRepository->findBy(["id"=>$id]);
-        if($company === []){
-            return $this->view('company does note existe', 404);
+        /** @var Company $company */
+        $company = $this->companyRepository->find($id);
+        if($company === [] || $company === null){
+            return $this->view('Compagny does note existe', 404);
         }
         if($this->getUser() !== null ) {
-            $us = $this->companyRepository->find($id);
-            if ($us->getMaster() === $this->getUser() || $this->MasterAdminDroit()) {
-                $this->em->remove($us);
+            if ($company->getMaster() === $this->getUser() || $this->MasterAdminDroit()) {
+                $company->getMaster()->setCompany(null);
+                $this->em->remove($company);
                 $this->em->flush();
             } else {
                 return $this->view('Not the same user or tu n as pas les droits',401);

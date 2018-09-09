@@ -164,6 +164,7 @@ class MasterController extends FOSRestController
         if($this->getUser() !== null ) {
             $us = $this->masterRepository->find($id);
             if ($us === $this->getUser() || $this->MasterAdminDroit()) {
+                $us->getCompany()->setMaster(null);
                 $this->em->remove($us);
                 $this->em->flush();
             } else {

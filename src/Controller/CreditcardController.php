@@ -69,14 +69,12 @@ class CreditcardController extends FOSRestController
      * @SWG\Tag(name="Creditcard")
      * @Rest\View(serializerGroups={"Creditcard"})
      */
-    public function getCreditcardsAction(Company $company)
+    public function getCreditcardsAction()
     {
         if($this->getUser() !== null )
         {
-            if ($this->MasterAdminDroit() || $this->getUser() == $company->getMaster()) {
-                return $this->view($this->creditcardRepository->findBy(["company"=>$company]));
-            }
-            return $this->view('Not Logged for this user or not an Admin', 403);
+            $company = $this->getUser()->getCompany();
+            return $this->view($this->creditcardRepository->findBy(["company"=>$company]));
         } else {
             return $this->view('Not Logged', 401);
         }
@@ -143,17 +141,21 @@ class CreditcardController extends FOSRestController
      */
     public function postCreditcardsAction(Creditcard $creditcard, ValidatorInterface $validator)
     {
-        if($this->getUser() == $creditcard->getCompany()->getMaster() || $this->MasterAdminDroit()) {
-            $validationErrors = $validator->validate($creditcard);
-            if (!($validationErrors->count() > 0)) {
-                $this->em->persist($creditcard);
-                $this->em->flush();
-                return $this->view($creditcard, 200);
+        if ($this->getUser() != null) {
+            if ($this->getUser() == $creditcard->getCompany()->getMaster() || $this->MasterAdminDroit()) {
+                $validationErrors = $validator->validate($creditcard);
+                if (!($validationErrors->count() > 0)) {
+                    $this->em->persist($creditcard);
+                    $this->em->flush();
+                    return $this->view($creditcard, 200);
+                } else {
+                    return $this->view($this->PostError($validationErrors), 400);
+                }
             } else {
-                return $this->view($this->PostError($validationErrors), 400);
+                return $this->view('Not the same user or tu n as pas les droits', 401);
             }
         } else {
-            return $this->view('Not the same user or tu n as pas les droits',401);
+            return $this->view('Not Logged', 401);
         }
     }
 
@@ -172,7 +174,7 @@ class CreditcardController extends FOSRestController
     {
         $creditcard = $this->creditcardRepository->find($id);
         if($creditcard === null){
-            return $this->view('creditcard does note existe', 404);
+            return $this->view('Creditcard does note existe', 404);
         }
         if ($creditcard->getCompany()->getMaster() == $this->getUser() || $this->MasterAdminDroit()) {
             /** @var Creditcard $creditcard */
@@ -218,13 +220,13 @@ class CreditcardController extends FOSRestController
         /** @var Creditcard $creditcard */
         $creditcard = $this->creditcardRepository->findBy(["id"=>$id]);
         if($creditcard === []){
-            return $this->view('creditcard does note existe', 404);
+            return $this->view('Creditcard does note existe', 404);
         }
         if($this->getUser() !== null ) {
-            $us = $this->creditcardRepository->find($id);
+            $creditcard = $this->creditcardRepository->find($id);
 
             if ($creditcard->getCompany()->getMaster() === $this->getUser() || $this->MasterAdminDroit()) {
-                $this->em->remove($us);
+                $this->em->remove($creditcard);
                 $this->em->flush();
             } else {
                 return $this->view('Not the same user or tu n as pas les droits',401);
