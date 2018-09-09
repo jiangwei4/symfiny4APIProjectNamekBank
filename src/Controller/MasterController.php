@@ -56,6 +56,7 @@ class MasterController extends FOSRestController
      */
     public function getMastersAction()
     {
+
         if($this->getUser() !== null )
         {
             if ($this->MasterAdminDroit()) {
@@ -113,25 +114,25 @@ class MasterController extends FOSRestController
             return $this->view('User does note existe', 404);
         }
         if ( $this->MasterAdminDroit() || $users == $this->getUser()) {
-            /** @var Master $us */
+            /** @var Master $users */
             $firstname = $request->get('firstname');
             $lastname = $request->get('lastname');
             $email = $request->get('email');
             $company = $request->get('birthday');
             if (isset($firstname)) {
-                $us->setFirstname($firstname);
+                $users->setFirstname($firstname);
             }
             if (isset($lastname)) {
-                $us->setLastname($lastname);
+                $users->setLastname($lastname);
             }
             if (isset($email)) {
-                $us->setEmail($email);
+                $users->setEmail($email);
             }
             if (isset($company)) {
-                $us->setCompany($company);
+                $users->setCompany($company);
             }
-            $this->em->persist($us);
-            $validationErrors = $validator->validate($us);
+            $this->em->persist($users);
+            $validationErrors = $validator->validate($users);
             if(!($validationErrors->count() > 0) ) {
                 $this->em->flush();
                 return $this->view("ok",200);

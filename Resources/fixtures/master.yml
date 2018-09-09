@@ -15,6 +15,3 @@ App\Entity\Master:
         lastname: <lastName()>
         email: <email()>
 
-App\Entity\Company:
-    company_{1..10}:
-        name: 'taggle'
