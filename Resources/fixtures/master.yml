@@ -17,3 +17,8 @@ App\Entity\Master:
         lastname: <lastName()>
         email: <email()>
         company: '@company_<current()>'
+    master_11:
+        firstname: <firstName()>
+        lastname: <lastName()>
+        email: <email()>
+        apiKey: 'keyUser2'

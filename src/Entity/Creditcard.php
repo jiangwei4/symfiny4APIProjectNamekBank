@@ -43,7 +43,7 @@ class Creditcard
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\CardScheme(
-     *     schemes={"VISA"},
+     *     schemes={"VISA","MASTERCARD"},
      *     message="Your credit card number is invalid."
      * )
      */

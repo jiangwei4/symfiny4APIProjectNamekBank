@@ -97,6 +97,8 @@ class CompanyController extends FOSRestController
     {
         $validationErrors = $validator->validate($company);
         if(!($validationErrors->count() > 0) ){
+            $company->setMaster($this->getUser());
+            $this->getUser()->setCompany($company);
             $this->em->persist($company);
             $this->em->flush();
             return $this->view($company,200);

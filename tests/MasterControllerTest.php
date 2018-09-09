@@ -13,7 +13,7 @@ class MasterControllerTest extends WebTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertJson($content);
         $arrayContent = json_decode($content, true);
-        $this->assertCount(10, $arrayContent);
+        $this->assertCount(11, $arrayContent);
     }
 
     public function testGetMasterMaster()
@@ -58,7 +58,6 @@ class MasterControllerTest extends WebTestCase
         $client->request('GET', '/api/masters/3', [], [], ['HTTP_CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyUser']);
         $response = $client->getResponse();
         $content = $response->getContent();
-
         $this->assertJson($content);
         $arrayContent = json_decode($content, true);
         $this->assertCount(6, $arrayContent);
@@ -80,11 +79,10 @@ class MasterControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/api/masters/3456');
         $response = $client->getResponse();
-        $content = $response->getContent();
         $this->assertEquals(404, $response->getStatusCode());
     }
     ///////////////////////////////////////////////post ////////////////////////////////////////
- /*   public function testPostMaster(){
+   public function testPostMaster(){
         $data = [
             "firstname" => "ffff",
             "lastname"=> "Ebert",
@@ -96,12 +94,12 @@ class MasterControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-       // $this->assertEquals(200, $response->getStatusCode());
+       $this->assertEquals(200, $response->getStatusCode());
         $this->assertJson($content);
-        $arrayContent = json_decode($content, true);
-        dump($arrayContent = json_decode($content, true));
+       $arrayContent = json_decode($content, true);
+       // dump($arrayContent = json_decode($content, true));
         $this->assertCount(6, $arrayContent);
-    }*/
+    }
     public function testPostMasterBlank(){
         $data = [
 
@@ -120,7 +118,7 @@ class MasterControllerTest extends WebTestCase
         $data = [
             "firstname" => "ffff",
             "lastname"=> "Ebert",
-            "email"=> "aletha.fley@muller.com"
+            "email"=> "donovan.ferre@outlook.fr"
 
         ];
 
@@ -157,7 +155,6 @@ class MasterControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('DELETE', '/api/masters/3', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin']);
         $response = $client->getResponse();
-        $content = $response->getContent();
         $this->assertEquals(204, $response->getStatusCode());
     }
     public function testDeleteNotGoodMasterAdmin(){
@@ -170,7 +167,7 @@ class MasterControllerTest extends WebTestCase
         $this->assertSame("User does note existe",$arrayContent);
     }
     ///////////////////////////////////////////////put utilisateur n°3 ////////////////////////////////////////
- /*   public function testPutMaster3Admin(){
+    public function testPutMaster3Admin(){
         $data = [
             "firstname"=>"lol",
             "email"=>"sdferty@yahoo.com"
@@ -180,10 +177,9 @@ class MasterControllerTest extends WebTestCase
         $client->request('PUT', '/api/masters/4', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin'], json_encode($data));
         $response = $client->getResponse();
         $content = $response->getContent();
-        dump($arrayContent = json_decode($content, true));
         $this->assertEquals(200, $response->getStatusCode());
 
-    }*/
+    }
     public function testPutMaster3AdminError(){
         $data = [
             "email"=>"sdferty"
@@ -192,7 +188,6 @@ class MasterControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('PUT', '/api/masters/4', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin'], json_encode($data));
         $response = $client->getResponse();
-        $content = $response->getContent();
         $this->assertEquals(401, $response->getStatusCode());
        // dump($arrayContent = json_decode($content, true));
     }
@@ -209,7 +204,7 @@ class MasterControllerTest extends WebTestCase
         $arrayContent = json_decode($content, true);
         $this->assertSame("User does note existe",$arrayContent);
     }
- /*   public function testPutMasterMaster(){
+   public function testPutMasterMaster(){
         $data = [
             "email"=>"sdfertfgdfy@yahoo.com"
         ];
@@ -217,9 +212,6 @@ class MasterControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('PUT', '/api/masters/2', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyUser'], json_encode($data));
         $response = $client->getResponse();
-       // $this->assertEquals(200, $response->getStatusCode());
-        $content = $response->getContent();
-        dump($arrayContent = json_decode($content, true));
+        $this->assertEquals(200, $response->getStatusCode());
     }
-*/
 }

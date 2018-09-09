@@ -91,7 +91,7 @@ class CompanyControllerTest extends WebTestCase {
            ];
 
            $client = static::createClient();
-           $client->request('POST', '/api/Company', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($data));
+           $client->request('POST', '/api/Company', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyUser2'], json_encode($data));
            $response = $client->getResponse();
            $content = $response->getContent();
            $this->assertEquals(200, $response->getStatusCode());
@@ -107,7 +107,6 @@ class CompanyControllerTest extends WebTestCase {
         $client = static::createClient();
         $client->request('POST', '/api/Company', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($data));
         $response = $client->getResponse();
-        $content = $response->getContent();
         $this->assertEquals(400, $response->getStatusCode());
        //  dump($arrayContent = json_decode($content, true));
     }
@@ -123,7 +122,6 @@ class CompanyControllerTest extends WebTestCase {
         $client = static::createClient();
         $client->request('POST', '/api/Company', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($data));
         $response = $client->getResponse();
-        $content = $response->getContent();
         $this->assertEquals(400, $response->getStatusCode());
     }
     ///////////////////////////////////////////////delete company n°6 ////////////////////////////////////////
@@ -151,7 +149,6 @@ class CompanyControllerTest extends WebTestCase {
         $client = static::createClient();
         $client->request('DELETE', '/api/companies/6', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin']);
         $response = $client->getResponse();
-        $content = $response->getContent();
         $this->assertEquals(204, $response->getStatusCode());
     }
     public function testDeleteNotGoodCompanyAdmin(){
@@ -172,7 +169,6 @@ class CompanyControllerTest extends WebTestCase {
            $client = static::createClient();
            $client->request('PUT', '/api/companies/4', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin'], json_encode($data));
            $response = $client->getResponse();
-           $content = $response->getContent();
          //  dump($arrayContent = json_decode($content, true));
            $this->assertEquals(200, $response->getStatusCode());
 
@@ -187,7 +183,6 @@ class CompanyControllerTest extends WebTestCase {
         $response = $client->getResponse();
         $content = $response->getContent();
         $this->assertEquals(401, $response->getStatusCode());
-        // dump($arrayContent = json_decode($content, true));
     }
     public function testPutCompany3456AdminError(){
         $data = [
@@ -211,7 +206,6 @@ class CompanyControllerTest extends WebTestCase {
            $client->request('PUT', '/api/companies/2', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyUser'], json_encode($data));
            $response = $client->getResponse();
            $this->assertEquals(200, $response->getStatusCode());
-         //  dump($arrayContent = json_decode($content, true));
        }
 
 }

@@ -145,7 +145,6 @@ class CreditcardControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('POST', '/api/Creditcard', [], [], ['HTTP_CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin'], json_encode($data));
         $response = $client->getResponse();
-        $content = $response->getContent();
         $this->assertEquals(400, $response->getStatusCode());
         //  dump($arrayContent = json_decode($content, true));
     }
@@ -160,7 +159,6 @@ class CreditcardControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('POST', '/api/Creditcard', [], [], ['HTTP_CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin'], json_encode($data));
         $response = $client->getResponse();
-        $content = $response->getContent();
         $this->assertEquals(400, $response->getStatusCode());
     }
     ///////////////////////////////////////////////delete Creditcard n°9 ////////////////////////////////////////
@@ -196,28 +194,26 @@ class CreditcardControllerTest extends WebTestCase
     }
 
     ///////////////////////////////////////////////put creditcard n°4 ////////////////////////////////////////
-   /* public function testPutCreditcard4Admin(){
+    public function testPutCreditcard4Admin(){
         $data = [
-            "name"=>"lol"
-        ];
-
-        $client = static::createClient();
-        $client->request('PUT', '/api/creditcards/4', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin'], json_encode($data));
-        $response = $client->getResponse();
-        $content = $response->getContent();
-          dump($arrayContent = json_decode($content, true));
-        $this->assertEquals(200, $response->getStatusCode());
-
-    }*/
-    public function testPutCreditcard4AdminErrorNumberExistant(){
-        $data = [
+            "name"=>"lol",
             "creditcardNumber" => "4556670528041909"
         ];
 
         $client = static::createClient();
         $client->request('PUT', '/api/creditcards/4', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin'], json_encode($data));
         $response = $client->getResponse();
-        $content = $response->getContent();
+        $this->assertEquals(200, $response->getStatusCode());
+
+    }
+    public function testPutCreditcard8AdminErrorNumberExistant(){
+        $data = [
+            "creditcardNumber" => "4556670528041909"
+        ];
+
+        $client = static::createClient();
+        $client->request('PUT', '/api/creditcards/8', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin'], json_encode($data));
+        $response = $client->getResponse();
         $this->assertEquals(401, $response->getStatusCode());
         // dump($arrayContent = json_decode($content, true));
     }
@@ -234,9 +230,9 @@ class CreditcardControllerTest extends WebTestCase
         $arrayContent = json_decode($content, true);
         $this->assertSame("Creditcard does note existe",$arrayContent);
     }
-  /*  public function testPutCreditcardMaster(){
+    public function testPutCreditcardMaster(){
         $data = [
-            "name"=>"sdfertfgdfy@yahoo.com"
+            "name"=>"sdfertfgdf"
         ];
 
         $client = static::createClient();
@@ -244,6 +240,6 @@ class CreditcardControllerTest extends WebTestCase
         $response = $client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
         //  dump($arrayContent = json_decode($content, true));
-    }*/
+    }
 
 }
