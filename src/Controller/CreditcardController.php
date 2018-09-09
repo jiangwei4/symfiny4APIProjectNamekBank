@@ -142,18 +142,17 @@ class CreditcardController extends FOSRestController
     public function postCreditcardsAction(Creditcard $creditcard, ValidatorInterface $validator)
     {
         if ($this->getUser() != null) {
-            if ($this->getUser() == $creditcard->getCompany()->getMaster() || $this->MasterAdminDroit()) {
-                $validationErrors = $validator->validate($creditcard);
-                if (!($validationErrors->count() > 0)) {
-                    $this->em->persist($creditcard);
-                    $this->em->flush();
-                    return $this->view($creditcard, 200);
-                } else {
-                    return $this->view($this->PostError($validationErrors), 400);
-                }
+            $validationErrors = $validator->validate($creditcard);
+            if (!($validationErrors->count() > 0)) {
+                $creditcard->setCompany($this->getUser()->getCompany());
+                $this->getUser()->getCompany()->addCreditcard($creditcard);
+                $this->em->persist($creditcard);
+                $this->em->flush();
+                return $this->view($creditcard, 200);
             } else {
-                return $this->view('Not the same user or tu n as pas les droits', 401);
+                return $this->view($this->PostError($validationErrors), 400);
             }
+
         } else {
             return $this->view('Not Logged', 401);
         }

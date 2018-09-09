@@ -125,7 +125,7 @@ class CreditcardControllerTest extends WebTestCase
         $data = [
             "name"  => "ffff",
             "creditcardType" => "Ebert",
-            "creditcardNumber" => "123"
+            "creditcardNumber" => "4556670528041909"
         ];
 
         $client = static::createClient();
@@ -161,6 +161,7 @@ class CreditcardControllerTest extends WebTestCase
         $response = $client->getResponse();
         $this->assertEquals(400, $response->getStatusCode());
     }
+
     ///////////////////////////////////////////////delete Creditcard n°9 ////////////////////////////////////////
     public function testDeleteNotlogged(){
         $client = static::createClient();
@@ -183,7 +184,7 @@ class CreditcardControllerTest extends WebTestCase
         $this->assertSame("Not the same user or tu n as pas les droits",$arrayContent);
     }
 
-    public function testDeleteNotGoodCompanyAdmin(){
+    public function testDeleteNotGoodCreditcardAdmin(){
         $client = static::createClient();
         $client->request('DELETE', '/api/creditcards/3456', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin']);
         $response = $client->getResponse();
@@ -192,12 +193,19 @@ class CreditcardControllerTest extends WebTestCase
         $arrayContent = json_decode($content, true);
         $this->assertSame("Creditcard does note existe",$arrayContent);
     }
+    public function testDeleteGoodCreditcardAdmin(){
+        $client = static::createClient();
+        $client->request('DELETE', '/api/creditcards/9', [], [], ['CONTENT_TYPE' => 'application/json','HTTP_AUTH-TOKEN' => 'keyAdmin']);
+        $response = $client->getResponse();
+        $content = $response->getContent();
+        $this->assertEquals(204, $response->getStatusCode());
+    }
 
     ///////////////////////////////////////////////put creditcard n°4 ////////////////////////////////////////
     public function testPutCreditcard4Admin(){
         $data = [
             "name"=>"lol",
-            "creditcardNumber" => "4556670528041909"
+            "creditcardNumber" => "9996670528041909"
         ];
 
         $client = static::createClient();
