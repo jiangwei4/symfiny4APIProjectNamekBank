@@ -96,7 +96,7 @@ class Company
         return $this->name;
     }
 
-    public function setName(string $name): ?string
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -108,7 +108,7 @@ class Company
         return $this->slogan;
     }
 
-    public function setSlogan(string $slogan): ?string
+    public function setSlogan(string $slogan): self
     {
         $this->slogan = $slogan;
 
@@ -120,7 +120,7 @@ class Company
         return $this->adress;
     }
 
-    public function setAdress(string $adress): ?string
+    public function setAdress(string $adress): self
     {
         $this->adress = $adress;
 
@@ -132,7 +132,7 @@ class Company
         return $this->websiteUrl;
     }
 
-    public function setWebsiteUrl(?string $websiteUrl): ?string
+    public function setWebsiteUrl(?string $websiteUrl): self
     {
         $this->websiteUrl = $websiteUrl;
 
@@ -144,7 +144,7 @@ class Company
         return $this->pictureUrl;
     }
 
-    public function setPictureUrl(?string $pictureUrl): ?string
+    public function setPictureUrl(?string $pictureUrl): self
     {
         $this->pictureUrl = $pictureUrl;
 

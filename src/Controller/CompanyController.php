@@ -123,8 +123,8 @@ class CompanyController extends FOSRestController
             return $this->view('Compagny does note existe', 404);
         }
         if ($this->getUser() == $company->getMaster() || $this->MasterAdminDroit()) {
-            /** @var Company $us */
-            $us = $this->companyRepository->find($id);
+            /** @var Company $company */
+            $company = $this->companyRepository->find($id);
             $name = $request->get('name');
             $slogan = $request->get('slogan');
             $adress = $request->get('adress');
@@ -132,25 +132,25 @@ class CompanyController extends FOSRestController
            $pictureUrl = $request->get('pictureUrl');
            $phoneNumber = $request->get('phoneNumber');
             if (isset($name)) {
-                $us->setName($name);
+                $company->setName($name);
             }
             if (isset($slogan)) {
-                $us->setSlogan($slogan);
+                $company->setSlogan($slogan);
             }
             if (isset($adress)) {
-                $us->setAdress($adress);
+                $company->setAdress($adress);
             }
             if (isset($websiteUrl)) {
-                $us->setWebsiteUrl($websiteUrl);
+                $company->setWebsiteUrl($websiteUrl);
             }
             if (isset($pictureUrl)) {
-                $us->setPictureUrl($pictureUrl);
+                $company->setPictureUrl($pictureUrl);
             }
             if (isset($phoneNumber)) {
-                $us->setPhoneNumber($phoneNumber);
+                $company->setPhoneNumber($phoneNumber);
             }
-            $this->em->persist($us);
-            $validationErrors = $validator->validate($us);
+            $this->em->persist($company);
+            $validationErrors = $validator->validate($company);
             if(!($validationErrors->count() > 0) ) {
                 $this->em->flush();
                 return $this->view("ok",200);

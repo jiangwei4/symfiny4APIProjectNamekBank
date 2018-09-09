@@ -61,7 +61,7 @@ class Creditcard
         return $this->name;
     }
 
-    public function setName(string $name): ?string
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -73,7 +73,7 @@ class Creditcard
         return $this->creditcardType;
     }
 
-    public function setCreditcardType(string $creditcardType): ?string
+    public function setCreditcardType(string $creditcardType): self
     {
         $this->creditcardType = $creditcardType;
 
@@ -85,7 +85,7 @@ class Creditcard
         return $this->creditcardNumber;
     }
 
-    public function setCreditcardNumber(string $creditcardNumber): ?string
+    public function setCreditcardNumber(string $creditcardNumber): self
     {
         $this->creditcardNumber = $creditcardNumber;
 

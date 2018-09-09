@@ -175,22 +175,22 @@ class CreditcardController extends FOSRestController
             return $this->view('creditcard does note existe', 404);
         }
         if ($creditcard->getCompany()->getMaster() == $this->getUser() || $this->MasterAdminDroit()) {
-            /** @var Creditcard $us */
-            $us = $this->creditcardRepository->find($id);
+            /** @var Creditcard $creditcard */
+            $creditcard = $this->creditcardRepository->find($id);
              $name = $request->get('$name');
              $creditcardType = $request->get('$creditcardType');
              $creditcardNumber = $request->get('$creditcardNumber');
              if (isset($name)) {
-                 $us->setName($name);
+                 $creditcard->setName($name);
              }
              if (isset($creditcardType)) {
-                 $us->setCreditcardType($creditcardType);
+                 $creditcard->setCreditcardType($creditcardType);
              }
              if (isset($creditcardNumber)) {
-                 $us->setCreditcardNumber($creditcardNumber);
+                 $creditcard->setCreditcardNumber($creditcardNumber);
              }
-            $this->em->persist($us);
-            $validationErrors = $validator->validate($us);
+            $this->em->persist($creditcard);
+            $validationErrors = $validator->validate($creditcard);
             if(!($validationErrors->count() > 0) ) {
                 $this->em->flush();
                 return $this->view("ok",200);
