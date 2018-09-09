@@ -58,12 +58,18 @@ class Company
     /**
      * @Groups("Company")
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url(
+     *    message = "The url '{{ value }}' is not a valid url",
+     * )
      */
     private $websiteUrl;
 
     /**
      * @Groups("Company")
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url(
+     *    message = "The url '{{ value }}' is not a valid url",
+     * )
      */
     private $pictureUrl;
 

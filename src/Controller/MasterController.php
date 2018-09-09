@@ -51,7 +51,7 @@ class MasterController extends FOSRestController
      *     description="Api Token"
      * )
      * @SWG\Response(response=200, description="")
-     * @SWG\Tag(name="master")
+     * @SWG\Tag(name="Master")
      * @Rest\View(serializerGroups={"master"})
      */
     public function getMastersAction()
@@ -70,7 +70,7 @@ class MasterController extends FOSRestController
     /**
 
      * @SWG\Response(response=200, description="")
-     * @SWG\Tag(name="master")
+     * @SWG\Tag(name="Master")
      * @Rest\View(serializerGroups={"master"})
      *
      */
@@ -80,7 +80,7 @@ class MasterController extends FOSRestController
     }
     /**
      * @SWG\Response(response=200, description="")
-     * @SWG\Tag(name="master")
+     * @SWG\Tag(name="Master")
      * @Rest\View(serializerGroups={"master"})
      * @Rest\Post("/masters")
      * @ParamConverter("master", converter="fos_rest.request_body")
@@ -104,7 +104,7 @@ class MasterController extends FOSRestController
      *     description="Api Token"
      * )
      * @SWG\Response(response=200, description="")
-     * @SWG\Tag(name="master")
+     * @SWG\Tag(name="Master")
      * @Rest\View(serializerGroups={"master"})
      */
     public function putMasterAction(Request $request, $id, ValidatorInterface $validator)
@@ -151,7 +151,7 @@ class MasterController extends FOSRestController
      *     description="Api Token"
      * )
      * @SWG\Response(response=200, description="")
-     * @SWG\Tag(name="master")
+     * @SWG\Tag(name="Master")
      * @Rest\View(serializerGroups={"master"})
      */
     public function deleteMasterAction($id)
